@@ -1,13 +1,15 @@
 from flask import Flask
 from flask import make_response
 from flask import render_template
+from flask_moment import Moment
+from datetime import datetime
 
 app = Flask(__name__)
-
+moment = Moment(app)
 
 @app.route("/")
 def index():
-    response = make_response(render_template("index.html"), 200)
+    response = make_response(render_template("index.html", current_time = datetime.utcnow()), 200)
     response.set_cookie("answer", "17")
     return response
 

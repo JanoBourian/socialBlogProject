@@ -18,7 +18,16 @@ A social blog with Flask. This project was built like a learn tool.
     * [Links](#section5-4)
     * [Static Files](#section5-5)
     * [Time and Flask Moment](#section5-6)
-* [](#section6)
+* [Web Forms](#section6)
+    * [Configuration](#section6-1)
+    * [Form Classes](#section6-2)
+    * [HTML Rendering of Forms](#section6-3)
+    * [Form Handling in view functions](#section6-4)
+    * [Redirects and User Sessions](#section6-5)
+    * [Message Flashing](#section6-6)
+* [Databases](#section7)
+* [Email](#section8)
+* [Large Application Structure](#section9)
 
 <div id="section1"></div>
 
@@ -32,6 +41,8 @@ from flask import redirect
 from flask import abort
 from flask import render_template
 from flask_bootstrap import Boostrap
+from flask_moment import Moment
+from datetime import datetime
 ```
 
 <div id="section2"></div>
@@ -42,6 +53,7 @@ from flask_bootstrap import Boostrap
 black
 flask
 flask-bootstrap
+flask-moment
 ```
 
 <div id="section3"></div>
@@ -245,13 +257,99 @@ We don't integrate _flask-bootstrap_ in this app because the _flask-bootstrap_ v
 
 ## Links
 
+Links only should have the _{{url\_for()}}_ tag.
+
+Links for paths
+```python
+{{url_for(function_name, **kwargs, _external=True)}}
+```
+
 <div id="section5-5"></div>
 
 ## Static Files
 
+Links for files
+```python
+{{url_for(static, filename='')}}
+```
 
 <div id="section5-6"></div>
 
 ## Time and Flask Moment
 
+In the _base.html_ 
+```html
+{{ moment.include_moment() }}
+```
+
+In the _app.py_ function
+```python
+render_template("index.html", current_time = datetime.utcnow())
+```
+
+Shows the currentime 
+```html
+    <p> The local date and time is {{moment(current_time).format('LLL')}} </p>
+    <p> That was {{moment(current_time).fromNow(refresh = True)}} </p>
+```
+
+Some methods of Moment.js availables here
+```python
+format()
+fromNow()
+fromTime()
+calendar()
+valueOf()
+unix()
+```
+
 <div id="section6"></div>
+
+# Web Forms
+
+<div id="section6-1"></div>
+
+## Configuration
+
+<div id="section6-2"></div>
+
+## Form Classes
+
+<div id="section6-3"></div>
+
+## HTML Rendering of Forms
+
+
+<div id="section6-4"></div>
+
+## Form Handling in View Functions
+
+<div id="section6-5"></div>
+
+## Redirects and User Sessions
+
+<div id="section6-6"></div>
+
+## Message Flashing
+
+<div id="section7"></div>
+
+# Databases
+
+<div id="section8"></div>
+
+# Email
+
+<div id="section9"></div>
+
+# Large Application Structure
+
+<div id="section10"></div>
+
+# User Authentication
+
+<div id="section11"></div>
+
+# User Roles
+
+<div id="section12"></div>

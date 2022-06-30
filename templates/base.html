@@ -15,7 +15,11 @@
   </head>
   <body>
     {% include 'navbar.html' %}
+    <!--
+      {% include 'carrousel.html' %}
+    -->
     <div class="container">
+        {{ moment.include_moment() }}
         {% block body %}
         {% endblock %}
     </div>
