@@ -42,6 +42,9 @@ from flask import abort
 from flask import render_template
 from flask_bootstrap import Boostrap
 from flask_moment import Moment
+from flask_wtf import FlaskForm
+from wtforms import StringField, SubmitField
+from wtforms.validators import DataRequired
 from datetime import datetime
 ```
 
@@ -54,6 +57,7 @@ black
 flask
 flask-bootstrap
 flask-moment
+flask-wtf
 ```
 
 <div id="section3"></div>
@@ -311,18 +315,105 @@ unix()
 
 ## Configuration
 
+We can use (and must) the _'SECRET_KEY'_ var in _app.py_ configuration.
+
 <div id="section6-2"></div>
 
 ## Form Classes
+
+The structure
+```python 
+from flask_wtf import FlaskForm
+from wtforms import StringField, SubmitField
+from wtforms.validators import DataRequired
+
+class NameForm(FlaskForm):
+    name = StringField('What is your name?', validators = [DataRequired()])
+    submit = SubmitField('submit')
+```
+
+### WTForms standard HTML fields
+
+* BooleanField
+* DateField : datetime.date
+* DateTimeField : datetime.datetime
+* DecimalField
+* FileField
+* HiddenField
+* MultipleFileField
+* FieldList
+* FloatField
+* FormField : Form enbedded as a field in a container form
+* IntegerField
+* PasswordField
+* RadioField
+* SelectField
+* SelectMultipleField
+* SubmitField
+* StringField
+* TextAreaField
+
+### WTF validators
+
+* DataRequired
+* Email
+* EqualTo
+* InputRequired
+* IPAddress
+* Length
+* MacAddress
+* NumberRange
+* Optional
+* Regexp
+* URL
+* UUID
+* AnyOf : Validates that the input is one of a list of possible values
+* NoneOf : Validates that the input is none of a list of possible values
 
 <div id="section6-3"></div>
 
 ## HTML Rendering of Forms
 
+```html
+<form method="POST" style="width:500px" class="my-3">
+    {{form.hidden_tag()}}
+    <div class="mb-3">
+        <label class="form-label">{{form.name.label}}</label>
+        {{form.name(class="form-control")}}
+    </div>
+    {{form.submit(class="btn btn-primary")}}
+</form>
+```
 
 <div id="section6-4"></div>
 
 ## Form Handling in View Functions
+
+```python
+app.config["SECRET_KEY"] = "hard to guess string"
+
+
+class NameForm(FlaskForm):
+    name = StringField("What is your name?", validators=[DataRequired()])
+    submit = SubmitField("Submit")
+
+
+@app.route("/", methods=["GET", "POST"])
+def index():
+    name = None
+    form = NameForm()
+    if form.validate_on_submit():
+        name = form.name.data
+        form.name.data = ""
+    response = make_response(
+        render_template(
+            "index.html", current_time=datetime.utcnow(), form=form, name=name
+        ),
+        200,
+    )
+    response.set_cookie("answer", "17")
+    return response
+```
 
 <div id="section6-5"></div>
 

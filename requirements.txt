@@ -1,3 +1,4 @@
 black
 flask
 flask-moment
+flask-wtf
