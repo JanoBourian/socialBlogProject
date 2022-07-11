@@ -40,6 +40,8 @@ from flask import make_request
 from flask import redirect
 from flask import abort
 from flask import render_template
+from flask import session
+from flask import url_for
 from flask_bootstrap import Boostrap
 from flask_moment import Moment
 from flask_wtf import FlaskForm
@@ -418,6 +420,24 @@ def index():
 <div id="section6-5"></div>
 
 ## Redirects and User Sessions
+
+Web browsers repeat the last request they sent when they are asked to refresh a page. For solve that we can use the _Post/Redirect/Get_ pattern. The new version will:
+
+```python
+@app.route("/", methods=["GET", "POST"])
+def index():
+    form = NameForm()
+    if form.validate_on_submit():
+        session['name'] = form.name.data
+        return redirect(url_for('index'))
+    response = make_response(
+        render_template(
+            "index.html", current_time=datetime.utcnow(), form=form, name=session.get("name", "")
+        ),
+        200,
+    )
+    return response
+```
 
 <div id="section6-6"></div>
 

@@ -1,6 +1,9 @@
 from flask import Flask
 from flask import make_response
 from flask import render_template
+from flask import session
+from flask import redirect
+from flask import url_for
 from flask_moment import Moment
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField
@@ -19,18 +22,16 @@ class NameForm(FlaskForm):
 
 @app.route("/", methods=["GET", "POST"])
 def index():
-    name = None
     form = NameForm()
     if form.validate_on_submit():
-        name = form.name.data
-        form.name.data = ""
+        session['name'] = form.name.data
+        return redirect(url_for('index'))
     response = make_response(
         render_template(
-            "index.html", current_time=datetime.utcnow(), form=form, name=name
+            "index.html", current_time=datetime.utcnow(), form=form, name=session.get("name", "")
         ),
         200,
     )
-    response.set_cookie("answer", "17")
     return response
 
 
